@@ -22,6 +22,8 @@ jobs:
           echo "Closed At: ${{ github.event.issue.closed_at }}"
           echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
           echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
+          echo "Issue Body:"
+          echo "${{ github.event.issue.body }}"  # Print the issue body
 
       - name: Save Issue Info as Artifact
         uses: actions/upload-artifact@v2
