@@ -20,11 +20,11 @@ jobs:
         run: |
           pip install requests
 
-      - name: Extract Issue Info
-        run: |
-          python extract_issue_info.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Extract Issue Info
+      #   run: |
+      #     python extract_issue_info.py
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create JSON File
         run: |
