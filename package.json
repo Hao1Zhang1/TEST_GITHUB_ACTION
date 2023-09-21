@@ -1,0 +1,16 @@
+{
+    "name": "github-action-issue-closed-info",
+    "version": "1.0.0",
+    "description": "GitHub Action to print issue information when it is closed",
+    "main": "index.js",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/your-username/your-repo-name"
+    },
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "@actions/github": "^5.0.0"
+    }
+  }
+  
