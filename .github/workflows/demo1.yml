@@ -32,7 +32,7 @@ jobs:
           # Fetch and concatenate issue comments into a single line
           comments_url="${{ github.event.issue.comments_url }}"
           comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url" | jq -r '.[].body')
-          comments_concatenated=$(echo "$comments" | tr '\n' ' ')
+          comments_concatenated=$(echo "$comments" )
           echo "Comment: $comments_concatenated"
 
       - name: Save Issue Info as Artifact
