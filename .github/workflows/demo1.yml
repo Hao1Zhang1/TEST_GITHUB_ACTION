@@ -1,4 +1,4 @@
-name: Print Closed Issue JSON
+name: Print Issue Info on Closure
 
 on:
   issues:
@@ -6,20 +6,25 @@ on:
       - closed
 
 jobs:
-  print-issue-json:
+  print_issue_info:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Print Issue JSON
-        if: github.event.issue.closed
+      - name: Print Issue Information
+        id: print-info
         run: |
-          echo "Closed Issue JSON:"
-          echo "${{ toJson(github.event.issue) }}"
+          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+          echo "Closed By: ${{ github.event.sender.login }}"
+          echo "Closed At: ${{ github.event.issue.closed_at }}"
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
+          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
+
+      - name: Save Issue Info as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: issue-info
+          path: issue-info.txt
