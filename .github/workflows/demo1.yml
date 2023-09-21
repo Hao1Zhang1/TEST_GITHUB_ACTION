@@ -1,4 +1,4 @@
-name: Issue Closed Info
+name: Print Issue Info on Closure
 
 on:
   issues:
@@ -6,30 +6,39 @@ on:
       - closed
 
 jobs:
-  print-issue-info:
+  print_issue_info:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    - name: Run JavaScript code
-      run: |
-        const { issue } = require('@actions/github');
+      - name: Print Issue Information
+        id: print-info
+        run: |
+          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+          echo "Closed By: ${{ github.event.sender.login }}"
+          echo "Closed At: ${{ github.event.issue.closed_at }}"
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
+          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
+          echo "Issue Body:"
+          echo "${{ github.event.issue.body }}"  # Print the issue body
 
-        async function main() {
-          try {
-            const issueData = await issue.get(context.issue);
-            console.log('Issue Data:', JSON.stringify(issueData.data, null, 2));
-          } catch (error) {
-            console.error('Error:', error);
-            process.exit(1);
-          }
-        }
+          # Fetch and print issue comments
+          comments_url="${{ github.event.issue.comments_url }}"
+          comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
+          for comment in $(echo "$comments" | jq -r '.[].body'); do
+            echo "Comment: $comment"
+          done
 
-        main();
+      - name: Save Issue Info as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: issue-info
+          path: issue-info.txt
