@@ -1,4 +1,4 @@
-name: Print Issue Info on Closure
+name: Issue Closed Info
 
 on:
   issues:
@@ -6,37 +6,30 @@ on:
       - closed
 
 jobs:
-  print_issue_info:
+  print-issue-info:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Check out code
-        uses: actions/checkout@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
 
-      - name: Print Issue Information
-        id: print-info
-        run: |
-          echo "Issue Title: ${{ github.event.issue.title }}"
-          echo "Issue Number: ${{ github.event.issue.number }}"
-          echo "Closed By: ${{ github.event.sender.login }}"
-          echo "Closed At: ${{ github.event.issue.closed_at }}"
-          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
-          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
-          echo "Issue Body: ${{ github.event.issue.body }}"  # Print the issue body
+    - name: Run JavaScript code
+      run: |
+        const { issue } = require('@actions/github');
 
-          # Fetch and concatenate issue comments into a single line
-          comments_url="${{ github.event.issue.comments_url }}"
-          comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url" | jq -r '.[].body')
-          comments_concatenated=$(echo "$comments" )
-          echo "Comment: $comments_concatenated"
+        async function main() {
+          try {
+            const issueData = await issue.get(context.issue);
+            console.log('Issue Data:', JSON.stringify(issueData.data, null, 2));
+          } catch (error) {
+            console.error('Error:', error);
+            process.exit(1);
+          }
+        }
 
-      - name: Save Issue Info as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: issue-info
-          path: issue-info.txt
+        main();
