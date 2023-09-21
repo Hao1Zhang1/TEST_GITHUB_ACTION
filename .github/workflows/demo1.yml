@@ -1,0 +1,20 @@
+name: Print Closed Issue JSON
+
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  print-issue-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Print Issue JSON
+        if: github.event.issue.closed
+        run: |
+          echo "Closed Issue JSON:"
+          echo "${{ toJson(github.event.issue) }}"
