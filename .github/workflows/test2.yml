@@ -13,23 +13,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-
-      - name: Install Dependencies
-        run: |
-          pip install requests
-
-      - name: Clone target Repo
+      - name: Clone Target Repo - Part 1
         env:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          
-
-          # Clone the target repository
           cd ..
           pwd
           git config --global user.name "Hao1Zhang1"
@@ -38,7 +26,8 @@ jobs:
           cd file_location_repo
           pwd
 
-          #
+      - name: Clone Target Repo - Part 2
+        run: |
           TARGET_FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
           echo "Issue Title: ${{ github.event.issue.title }}" > "$TARGET_FILENAME"
           echo "Issue Number: ${{ github.event.issue.number }}" >> "$TARGET_FILENAME"
@@ -49,6 +38,8 @@ jobs:
           echo "Issue Body:" >> "$TARGET_FILENAME"
           echo "${{ github.event.issue.body }}"  >> "$TARGET_FILENAME"
 
+      - name: Clone Target Repo - Part 3
+        run: |
           # Fetch and print issue comments
           comments_url="${{ github.event.issue.comments_url }}"
           comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
@@ -56,28 +47,11 @@ jobs:
             echo "Comment: $comment" >> "$TARGET_FILENAME"
           done
 
+      - name: Clone Target Repo - Part 4
+        run: |
           git add "$TARGET_FILENAME"
           echo "added"
           git commit -m "Updated issue_info.txt from source repo"
           echo "committed"
           git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
           echo "pushed"
-      
-      # - name: Create JSON File
-      #   run: |
-          
-
-      # - name: Push to Target Repository
-      #   env:
-      #     TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
-      #   run: |
-      #     # Commit and push to the target repository
-      #     git config --global user.name "Hao1Zhang1"
-      #     git config --global user.email "hao.zhang@jonesradiology.com.au"
-      #     cd ..
-      #     cd file_location_repo
-      #     pwd
-      #     git add issue_info.json
-      #     git commit -m "Add issue_info.json from source repo"
-      #     git push
-
