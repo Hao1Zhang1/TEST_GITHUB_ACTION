@@ -29,14 +29,14 @@ jobs:
           # Clone the target repository
           cd ..
           pwd
+          git config --global user.name "Hao1Zhang1"
+          git config --global user.email "hao.zhang@jonesradiology.com.au"
           git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git file_location_repo
           cd file_location_repo
           pwd
           echo "$ISSUE_INFO" > issue_info.json
           git add issue_info.json
           git commit -m "Add issue_info.json from source repo"
-          git config --global user.name "Hao1Zhang1"
-          git config --global user.email "hao.zhang@jonesradiology.com.au"
           git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
       
       # - name: Create JSON File
