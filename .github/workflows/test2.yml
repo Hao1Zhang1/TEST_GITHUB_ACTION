@@ -44,6 +44,8 @@ jobs:
           # Commit and push to the target repository
           git config --global user.name "Hao1Zhang1"
           git config --global user.email "hao.zhang@jonesradiology.com.au"
+          cd ..
+          cd file_location_repo
           pwd
           git add issue_info.json
           git commit -m "Add issue_info.json from source repo"
