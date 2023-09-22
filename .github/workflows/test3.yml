@@ -1,0 +1,31 @@
+name: Update Greeting
+
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  update-greeting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Clone Private Repo
+        run: |
+          git clone https://github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          cd test_repo
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
+
+      - name: Update Greeting
+        run: |
+          echo "Hello World" > greeting.txt
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add greeting.txt
+          git commit -m "Update greeting"
+          git push origin main
+        working-directory: ./test_repo
