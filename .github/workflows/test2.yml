@@ -39,24 +39,24 @@ jobs:
           pwd
 
           #
-          FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
-          echo "Issue Title: ${{ github.event.issue.title }}" > $FILENAME
-          echo "Issue Number: ${{ github.event.issue.number }}" >> $FILENAME
-          echo "Closed By: ${{ github.event.sender.login }}" >> $FILENAME
-          echo "Closed At: ${{ github.event.issue.closed_at }}" >> $FILENAME
-          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}" >> $FILENAME
-          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}" >> $FILENAME
-          echo "Issue Body:" >> $FILENAME
-          echo "${{ github.event.issue.body }}"  >> $FILENAME
+          TARGET_FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
+          echo "Issue Title: ${{ github.event.issue.title }}" > "$TARGET_FILENAME"
+          echo "Issue Number: ${{ github.event.issue.number }}" >> "$TARGET_FILENAME"
+          echo "Closed By: ${{ github.event.sender.login }}" >> "$TARGET_FILENAME"
+          echo "Closed At: ${{ github.event.issue.closed_at }}" >> "$TARGET_FILENAME"
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}" >> "$TARGET_FILENAME"
+          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}" >> "$TARGET_FILENAME"
+          echo "Issue Body:" >> "$TARGET_FILENAME"
+          echo "${{ github.event.issue.body }}"  >> "$TARGET_FILENAME"
 
           # Fetch and print issue comments
           comments_url="${{ github.event.issue.comments_url }}"
           comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
           for comment in $(echo "$comments" | jq -r '.[].body'); do
-            echo "Comment: $comment" >> $FILENAME
+            echo "Comment: $comment" >> "$TARGET_FILENAME"
           done
 
-          git add $FILENAME
+          git add "$TARGET_FILENAME"
           echo "added"
           git commit -m "Updated issue_info.txt from source repo"
           echo "committed"
