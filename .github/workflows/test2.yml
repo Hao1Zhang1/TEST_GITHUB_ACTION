@@ -35,9 +35,13 @@ jobs:
           cd file_location_repo
           pwd
           echo "$ISSUE_INFO" > issue_info.json
+          echo issue_info.json
           git add issue_info.json
+          echo "added"
           git commit -m "Add issue_info.json from source repo"
+          echo "committed"
           git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          echo "pushed"
       
       # - name: Create JSON File
       #   run: |
