@@ -32,6 +32,8 @@ jobs:
 
       - name: Commit JSON File
         run: |
+          git config --global user.name "Hao1Zhang1"
+          git config --global user.email "hao.zhang@jonesradiology.com"
           git add issue_info.json
           git commit -m "Add issue_info.json"
           git push
