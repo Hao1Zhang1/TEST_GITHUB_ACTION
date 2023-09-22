@@ -52,6 +52,8 @@ jobs:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          pwd
+          ls
           TARGET_FILENAME="${{ steps.write_file.outputs.target_filename }}"
           git config --global user.name "Hao1Zhang1"
           git config --global user.email "hao.zhang@jonesradiology.com.au"
