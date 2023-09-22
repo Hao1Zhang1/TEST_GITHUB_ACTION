@@ -46,12 +46,13 @@ jobs:
           done
           # echo "target_filename=$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
 
-          # - name: GIT PUSH
-          #   env:
-          #     TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
-          #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          #   run: |
-          # TARGET_FILENAME="${{ steps.write_file.outputs.target_filename }}"
+      - name: GIT PUSH
+        working-directory: ./file_location_repo
+        env:
+          TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TARGET_FILENAME="${{ steps.write_file.outputs.target_filename }}"
           git config --global user.name "Hao1Zhang1"
           git config --global user.email "hao.zhang@jonesradiology.com.au"
           echo "$TARGET_FILENAME"
@@ -60,6 +61,6 @@ jobs:
           git commit -m "Updated issue_info.txt from source repo"
           echo "committed"
           ls
-          git push https://github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
-          # git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          # git push https://github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
           echo "pushed"

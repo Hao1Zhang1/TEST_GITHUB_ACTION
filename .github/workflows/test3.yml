@@ -15,7 +15,7 @@ jobs:
 
       - name: Clone Private Repo
         run: |
-          git clone https://github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          git clone git clone https://username:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/Hao1Zhang1/test_repo.git test
           cd test_repo
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
