@@ -40,19 +40,19 @@ jobs:
 
           #
           echo "Issue Title: ${{ github.event.issue.title }}" > issue_info.txt
-          echo "Issue Number: ${{ github.event.issue.number }}" > issue_info.txt
-          echo "Closed By: ${{ github.event.sender.login }}" > issue_info.txt
-          echo "Closed At: ${{ github.event.issue.closed_at }}" > issue_info.txt
-          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}" > issue_info.txt
-          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}" > issue_info.txt
+          echo "Issue Number: ${{ github.event.issue.number }}" >> issue_info.txt
+          echo "Closed By: ${{ github.event.sender.login }}" >> issue_info.txt
+          echo "Closed At: ${{ github.event.issue.closed_at }}" >> issue_info.txt
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}" >> issue_info.txt
+          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}" >> issue_info.txt
           echo "Issue Body:" > issue_info.txt
-          echo "${{ github.event.issue.body }}"  # Print the issue body > issue_info.txt
+          echo "${{ github.event.issue.body }}"  # Print the issue body >> issue_info.txt
 
           # Fetch and print issue comments
           comments_url="${{ github.event.issue.comments_url }}"
           comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
           for comment in $(echo "$comments" | jq -r '.[].body'); do
-            echo "Comment: $comment" > issue_info.txt
+            echo "Comment: $comment" >> issue_info.txt
           done
 
           cat issue_info.json
