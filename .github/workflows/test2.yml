@@ -52,6 +52,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TARGET_FILENAME="${{ steps.write_file.outputs.target_filename }}"
+          git config --global user.name "Hao1Zhang1"
+          git config --global user.email "hao.zhang@jonesradiology.com.au"
           echo "$TARGET_FILENAME"
           git add "$TARGET_FILENAME"
           echo "added"
