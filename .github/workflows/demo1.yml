@@ -1,44 +1,44 @@
-name: Print Issue Info on Closure
+# name: Print Issue Info on Closure
 
-on:
-  issues:
-    types:
-      - closed
+# on:
+#   issues:
+#     types:
+#       - closed
 
-jobs:
-  print_issue_info:
-    runs-on: ubuntu-latest
+# jobs:
+#   print_issue_info:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+#     steps:
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '16'
 
-      - name: Check out code
-        uses: actions/checkout@v2
+#       - name: Check out code
+#         uses: actions/checkout@v2
 
-      - name: Print Issue Information
-        id: print-info
-        run: |
-          echo "Issue Title: ${{ github.event.issue.title }}"
-          echo "Issue Number: ${{ github.event.issue.number }}"
-          echo "Closed By: ${{ github.event.sender.login }}"
-          echo "Closed At: ${{ github.event.issue.closed_at }}"
-          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
-          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
-          echo "Issue Body:"
-          echo "${{ github.event.issue.body }}"  # Print the issue body
+#       - name: Print Issue Information
+#         id: print-info
+#         run: |
+#           echo "Issue Title: ${{ github.event.issue.title }}"
+#           echo "Issue Number: ${{ github.event.issue.number }}"
+#           echo "Closed By: ${{ github.event.sender.login }}"
+#           echo "Closed At: ${{ github.event.issue.closed_at }}"
+#           echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
+#           echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
+#           echo "Issue Body:"
+#           echo "${{ github.event.issue.body }}"  # Print the issue body
 
-          # Fetch and print issue comments
-          comments_url="${{ github.event.issue.comments_url }}"
-          comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
-          for comment in $(echo "$comments" | jq -r '.[].body'); do
-            echo "Comment: $comment"
-          done
+#           # Fetch and print issue comments
+#           comments_url="${{ github.event.issue.comments_url }}"
+#           comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
+#           for comment in $(echo "$comments" | jq -r '.[].body'); do
+#             echo "Comment: $comment"
+#           done
 
-      - name: Save Issue Info as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: issue-info
-          path: issue-info.txt
+#       - name: Save Issue Info as Artifact
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: issue-info
+#           path: issue-info.txt
