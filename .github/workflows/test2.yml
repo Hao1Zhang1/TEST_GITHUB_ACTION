@@ -25,8 +25,10 @@ jobs:
       - name: Clone target Repo
         run: |
           # Clone the target repository
+          cd..
           pwd
-          git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git .
+          git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git file_location_repo
+          cd file_location_repo
       
       - name: Create JSON File
         run: |
