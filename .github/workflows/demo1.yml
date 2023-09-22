@@ -1,44 +1,66 @@
-# name: Print Issue Info on Closure
+name: Extract Issue Info
 
-# on:
-#   issues:
-#     types:
-#       - closed
+on:
+  issues:
+    types:
+      - closed
 
-# jobs:
-#   print_issue_info:
-#     runs-on: ubuntu-latest
+jobs:
+  extract-issue-info:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '16'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-#       - name: Check out code
-#         uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
 
-#       - name: Print Issue Information
-#         id: print-info
-#         run: |
-#           echo "Issue Title: ${{ github.event.issue.title }}"
-#           echo "Issue Number: ${{ github.event.issue.number }}"
-#           echo "Closed By: ${{ github.event.sender.login }}"
-#           echo "Closed At: ${{ github.event.issue.closed_at }}"
-#           echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
-#           echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}"
-#           echo "Issue Body:"
-#           echo "${{ github.event.issue.body }}"  # Print the issue body
+      - name: Install Dependencies
+        run: |
+          pip install requests
 
-#           # Fetch and print issue comments
-#           comments_url="${{ github.event.issue.comments_url }}"
-#           comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
-#           for comment in $(echo "$comments" | jq -r '.[].body'); do
-#             echo "Comment: $comment"
-#           done
+      - name: Clone Target Repo - Part 1
+        env:
+          TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd ..
+          pwd
+          git config --global user.name "Hao1Zhang1"
+          git config --global user.email "hao.zhang@jonesradiology.com.au"
+          git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git file_location_repo
+          cd file_location_repo
+          pwd
 
-#       - name: Save Issue Info as Artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: issue-info
-#           path: issue-info.txt
+      - name: Clone Target Repo - Part 2
+        run: |
+          TARGET_FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
+          echo "Issue Title: ${{ github.event.issue.title }}" > "$TARGET_FILENAME"
+          echo "Issue Number: ${{ github.event.issue.number }}" >> "$TARGET_FILENAME"
+          echo "Closed By: ${{ github.event.sender.login }}" >> "$TARGET_FILENAME"
+          echo "Closed At: ${{ github.event.issue.closed_at }}" >> "$TARGET_FILENAME"
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}" >> "$TARGET_FILENAME"
+          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}" >> "$TARGET_FILENAME"
+          echo "Issue Body:" >> "$TARGET_FILENAME"
+          echo "${{ github.event.issue.body }}"  >> "$TARGET_FILENAME"
+
+      - name: Clone Target Repo - Part 3
+        run: |
+          # Fetch and print issue comments
+          comments_url="${{ github.event.issue.comments_url }}"
+          comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
+          for comment in $(echo "$comments" | jq -r '.[].body'); do
+            echo "Comment: $comment" >> "$TARGET_FILENAME"
+          done
+
+      - name: Clone Target Repo - Part 4
+        run: |
+          git add "$TARGET_FILENAME"
+          echo "added"
+          git commit -m "Updated issue_info.txt from source repo"
+          echo "committed"
+          git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          echo "pushed"
