@@ -52,6 +52,8 @@ jobs:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd ..
+          cd file_location_repo
           pwd
           ls
           TARGET_FILENAME="${{ steps.write_file.outputs.target_filename }}"
