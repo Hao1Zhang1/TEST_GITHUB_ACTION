@@ -51,9 +51,9 @@ jobs:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          COMMIT_FILE_NAME = "test issue 4_4.txt"
-          echo "$COMMIT_FILE_NAME"
-          git add "$COMMIT_FILE_NAME"
+          TARGET_FILENAME="${{ steps.write_file.outputs.target_filename }}"
+          echo "$TARGET_FILENAME"
+          git add "$TARGET_FILENAME"
           echo "added"
           git commit -m "Updated issue_info.txt from source repo"
           echo "committed"
