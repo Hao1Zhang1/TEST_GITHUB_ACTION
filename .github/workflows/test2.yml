@@ -27,16 +27,8 @@ jobs:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Extract issue number from the event payload
-          ISSUE_NUMBER=$(jq --raw-output .issue.number $GITHUB_EVENT_PATH)
+          
 
-          # Make a GET request to the GitHub API to fetch issue details
-          ISSUE_INFO=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER")
-
-          # Print the issue details
-          echo "Issue Info:"
-          echo "$ISSUE_INFO"
           # Clone the target repository
           cd ..
           pwd
@@ -45,11 +37,28 @@ jobs:
           git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git file_location_repo
           cd file_location_repo
           pwd
-          echo "$ISSUE_INFO" > issue_info.json
+
+          #
+          echo "Issue Title: ${{ github.event.issue.title }}" > issue_info.txt
+          echo "Issue Number: ${{ github.event.issue.number }}" > issue_info.txt
+          echo "Closed By: ${{ github.event.sender.login }}" > issue_info.txt
+          echo "Closed At: ${{ github.event.issue.closed_at }}" > issue_info.txt
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}" > issue_info.txt
+          echo "Assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}" > issue_info.txt
+          echo "Issue Body:" > issue_info.txt
+          echo "${{ github.event.issue.body }}"  # Print the issue body > issue_info.txt
+
+          # Fetch and print issue comments
+          comments_url="${{ github.event.issue.comments_url }}"
+          comments=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comments_url")
+          for comment in $(echo "$comments" | jq -r '.[].body'); do
+            echo "Comment: $comment" > issue_info.txt
+          done
+
           cat issue_info.json
-          git add issue_info.json
+          git add issue_info.txt
           echo "added"
-          git commit -m "Add issue_info.json from source repo"
+          git commit -m "Updated issue_info.txt from source repo"
           echo "committed"
           git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
           echo "pushed"
