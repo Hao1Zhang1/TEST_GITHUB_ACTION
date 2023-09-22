@@ -44,7 +44,7 @@ jobs:
           for comment in $(echo "$comments" | jq -r '.[].body'); do
             echo "Comment: $comment" >> "$TARGET_FILENAME"
           done
-          echo "target_filename=:$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
+          echo "target_filename=$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
 
       - name: GIT PUSH
         env:
@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TARGET_FILENAME = "${{ steps.write_file.outputs.target_filename }}"
-          echo $TARGET_FILENAME
+          echo "$TARGET_FILENAME"
           git add "$TARGET_FILENAME"
           echo "added"
           git commit -m "Updated issue_info.txt from source repo"
