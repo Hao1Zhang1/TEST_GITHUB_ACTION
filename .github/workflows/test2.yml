@@ -47,7 +47,7 @@ jobs:
           echo "target_filename=$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
 
       - name: GIT PUSH
-        working-directory: ./file_location_repo
+        # working-directory: ./file_location_repo
         env:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
