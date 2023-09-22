@@ -32,22 +32,26 @@ jobs:
           git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git file_location_repo
           cd file_location_repo
           pwd
-      
-      - name: Create JSON File
-        run: |
           echo "$ISSUE_INFO" > issue_info.json
-
-      - name: Push to Target Repository
-        env:
-          TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
-        run: |
-          # Commit and push to the target repository
-          git config --global user.name "Hao1Zhang1"
-          git config --global user.email "hao.zhang@jonesradiology.com.au"
-          cd ..
-          cd file_location_repo
-          pwd
           git add issue_info.json
           git commit -m "Add issue_info.json from source repo"
-          git push
+          git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+      
+      # - name: Create JSON File
+      #   run: |
+          
+
+      # - name: Push to Target Repository
+      #   env:
+      #     TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
+      #   run: |
+      #     # Commit and push to the target repository
+      #     git config --global user.name "Hao1Zhang1"
+      #     git config --global user.email "hao.zhang@jonesradiology.com.au"
+      #     cd ..
+      #     cd file_location_repo
+      #     pwd
+      #     git add issue_info.json
+      #     git commit -m "Add issue_info.json from source repo"
+      #     git push
 
