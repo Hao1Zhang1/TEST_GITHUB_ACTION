@@ -22,6 +22,11 @@ jobs:
         run: |
           pip install requests
 
+      - name: Clone target Repo
+        run: |
+          # Clone the target repository
+          git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git .
+      
       - name: Create JSON File
         run: |
           echo "$ISSUE_INFO" > issue_info.json
@@ -38,13 +43,6 @@ jobs:
         env:
           TARGET_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Clone the target repository
-          git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/target-repo.git
-          cd target-repo
-
-          # Copy the issue_info.json from the source repository
-          cp ../issue_info.json .
-
           # Commit and push to the target repository
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
