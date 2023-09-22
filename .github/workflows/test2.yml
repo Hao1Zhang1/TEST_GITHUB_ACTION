@@ -26,7 +26,8 @@ jobs:
           cd file_location_repo
           pwd
 
-      - name: Write File
+      - id: write_file
+        name: Write File
         run: |
           TARGET_FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
           echo "Issue Title: ${{ github.event.issue.title }}" > "$TARGET_FILENAME"
@@ -43,14 +44,14 @@ jobs:
           for comment in $(echo "$comments" | jq -r '.[].body'); do
             echo "Comment: $comment" >> "$TARGET_FILENAME"
           done
-          echo "::set-output name=target_filename::$TARGET_FILENAME"
+          echo "target_filename=:$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
 
       - name: GIT PUSH
         env:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TARGET_FILENAME = "${{ steps.setter.outputs.target_filename }}"
+          TARGET_FILENAME = "${{ steps.write_file.outputs.target_filename }}"
           echo $TARGET_FILENAME
           git add "$TARGET_FILENAME"
           echo "added"
