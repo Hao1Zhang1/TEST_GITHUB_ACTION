@@ -25,6 +25,7 @@ jobs:
           git clone https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git file_location_repo
           cd file_location_repo
           pwd
+          ls
 
       - id: write_file
         name: Write File
