@@ -35,7 +35,7 @@ jobs:
           cd file_location_repo
           pwd
           echo "$ISSUE_INFO" > issue_info.json
-          echo issue_info.json
+          cat issue_info.json
           git add issue_info.json
           echo "added"
           git commit -m "Add issue_info.json from source repo"
