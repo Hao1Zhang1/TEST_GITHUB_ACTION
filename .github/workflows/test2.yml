@@ -30,6 +30,8 @@ jobs:
       - id: write_file
         name: Write File
         run: |
+          cd ..
+          cd file_location_repo
           pwd
           TARGET_FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
           echo "Issue Title: ${{ github.event.issue.title }}" > "$TARGET_FILENAME"
