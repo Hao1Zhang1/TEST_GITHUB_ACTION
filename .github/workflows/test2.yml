@@ -44,7 +44,7 @@ jobs:
           for comment in $(echo "$comments" | jq -r '.[].body'); do
             echo "Comment: $comment" >> "$TARGET_FILENAME"
           done
-          # echo "target_filename=$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
+          echo "target_filename=$TARGET_FILENAME" >> "$GITHUB_OUTPUT"
 
       - name: GIT PUSH
         working-directory: ./file_location_repo
