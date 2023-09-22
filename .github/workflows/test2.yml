@@ -50,7 +50,7 @@ jobs:
           TARGET_REPO_TOKEN: ${{ secrets.TARGET_REPO_TOKEN  }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TARGET_FILENAME = ${{ steps.setter.outputs.TARGET_FILENAME }}
+          TARGET_FILENAME = "${{ steps.setter.outputs.TARGET_FILENAME }}"
           git add "$TARGET_FILENAME"
           echo "added"
           git commit -m "Updated issue_info.txt from source repo"
