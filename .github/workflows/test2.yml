@@ -60,8 +60,6 @@ jobs:
           git commit -m "Updated issue_info.txt from source repo"
           echo "committed"
           ls
-          git pull https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
-          git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
-          https://github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
-          # https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          git push https://github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
+          # git push https://Hao1Zhang1:${TARGET_REPO_TOKEN}@github.com/Hao1Zhang1/TEST_GITHUB_ACTION_FILE_STORING.git
           echo "pushed"
