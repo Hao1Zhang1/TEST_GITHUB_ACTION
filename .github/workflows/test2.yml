@@ -34,6 +34,7 @@ jobs:
           cd file_location_repo
           pwd
           TARGET_FILENAME="${{ github.event.issue.title }}_${{ github.event.issue.number }}.txt"
+          echo "All the issue infos: ${{ github.event.issue}}"
           echo "Issue Title: ${{ github.event.issue.title }}" > "$TARGET_FILENAME"
           echo "Issue Number: ${{ github.event.issue.number }}" >> "$TARGET_FILENAME"
           echo "Closed By: ${{ github.event.sender.login }}" >> "$TARGET_FILENAME"
